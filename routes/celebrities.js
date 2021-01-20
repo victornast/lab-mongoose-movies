@@ -16,7 +16,7 @@ router.post('/celebrities', (req, res, next) => {
   })
     .then(() => res.redirect('/celebrities'))
     .catch((error) => {
-      res.redirect('celebrities/create');
+      res.redirect('/celebrities/create');
       next(error);
     });
 });
@@ -35,6 +35,13 @@ router.get('/celebrities/:id', (req, res, next) => {
     .then((celebrity) => {
       res.render('celebrities/show', { celebrity });
     })
+    .catch((error) => next(error));
+});
+
+router.post('/celebrities/:id/delete', (req, res, next) => {
+  const id = req.params.id;
+  Celebrity.findByIdAndDelete(id)
+    .then(() => res.redirect('/celebrities'))
     .catch((error) => next(error));
 });
 
