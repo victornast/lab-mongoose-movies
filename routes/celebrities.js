@@ -7,6 +7,14 @@ router.get('/celebrities/create', (req, res, next) => {
   res.render('celebrities/create');
 });
 
+router.get('/celebrities', (req, res, next) => {
+  Celebrity.find()
+    .then((celebrities) => {
+      res.render('celebrities/index', { celebrities });
+    })
+    .catch((error) => next(error));
+});
+
 router.post('/celebrities', (req, res, next) => {
   const data = req.body;
   Celebrity.create({
@@ -19,14 +27,6 @@ router.post('/celebrities', (req, res, next) => {
       res.redirect('/celebrities/create');
       next(error);
     });
-});
-
-router.get('/celebrities', (req, res, next) => {
-  Celebrity.find()
-    .then((celebrities) => {
-      res.render('celebrities/index', { celebrities });
-    })
-    .catch((error) => next(error));
 });
 
 router.get('/celebrities/:id', (req, res, next) => {
@@ -59,23 +59,25 @@ router.post('/celebrities/:id/delete', (req, res, next) => {
 
 router.get('/celebrities/:id/edit', (req, res, next) => {
   const id = req.params.id;
-  Celebrity.findById(id).then((celebrity) => {
-    switch (celebrity.occupation) {
-      case 'actor':
-        celebrity.isActor = 'true';
-        break;
-      case 'singer':
-        celebrity.isSinger = 'true';
-        break;
-      case 'commedian':
-        celebrity.isCommedian = 'true';
-        break;
-      case 'unknown':
-        celebrity.isUnknown = 'true';
-        break;
-    }
-    res.render('celebrities/edit', { celebrity }).catch((error) => next(error));
-  });
+  Celebrity.findById(id)
+    .then((celebrity) => {
+      switch (celebrity.occupation) {
+        case 'actor':
+          celebrity.isActor = 'true';
+          break;
+        case 'singer':
+          celebrity.isSinger = 'true';
+          break;
+        case 'commedian':
+          celebrity.isCommedian = 'true';
+          break;
+        case 'unknown':
+          celebrity.isUnknown = 'true';
+          break;
+      }
+      res.render('celebrities/edit', { celebrity });
+    })
+    .catch((error) => next(error));
 });
 
 module.exports = router;
