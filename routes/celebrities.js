@@ -38,11 +38,44 @@ router.get('/celebrities/:id', (req, res, next) => {
     .catch((error) => next(error));
 });
 
+router.post('/celebrities/:id', (req, res, next) => {
+  const id = req.params.id;
+  const data = req.body;
+  Celebrity.findByIdAndUpdate(id, {
+    name: data.name,
+    occupation: data.occupation,
+    catchPhrase: data.catchPhrase
+  })
+    .then(() => res.redirect('/celebrities'))
+    .catch((error) => next(error));
+});
+
 router.post('/celebrities/:id/delete', (req, res, next) => {
   const id = req.params.id;
   Celebrity.findByIdAndDelete(id)
     .then(() => res.redirect('/celebrities'))
     .catch((error) => next(error));
+});
+
+router.get('/celebrities/:id/edit', (req, res, next) => {
+  const id = req.params.id;
+  Celebrity.findById(id).then((celebrity) => {
+    switch (celebrity.occupation) {
+      case 'actor':
+        celebrity.isActor = 'true';
+        break;
+      case 'singer':
+        celebrity.isSinger = 'true';
+        break;
+      case 'commedian':
+        celebrity.isCommedian = 'true';
+        break;
+      case 'unknown':
+        celebrity.isUnknown = 'true';
+        break;
+    }
+    res.render('celebrities/edit', { celebrity }).catch((error) => next(error));
+  });
 });
 
 module.exports = router;

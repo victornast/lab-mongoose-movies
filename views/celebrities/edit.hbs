@@ -1,0 +1,18 @@
+<h2>Edit {{ celebrity.name }}</h2>
+<form action="/celebrities/{{ _id }}" method="POST">
+    <label for="input-name">Name</label>
+    <input type="text" id="input-name" name="name" placeholder="{{ celebrity.name }}" required value="{{ celebrity.name }}"/>
+
+    <label for="input-occupation">Occupation</label>
+    <select name="occupation" id="input-occupation" required>
+        <option value="actor" {{#if celebrity.isActor}}selected{{/if}}>Actor</option>
+        <option value="singer" {{#if celebrity.isSinger}}selected{{/if}}>Singer</option>
+        <option value="commedian" {{#if celebrity.isCommedian}}selected{{/if}}>Commedian</option>
+        <option value="unknown" {{#if celebrity.isUnknown}}selected{{/if}}>Unknown</option>
+    </select>
+
+    <label for="input-phrase">Catch Phrase</label>
+    <input type="text" id="input-phrase" name="catchPhrase" placeholder="{{ celebrity.catchPhrase }}" required value="{{ celebrity.catchPhrase }}"/>
+
+    <button>Submit</button>
+</form>
